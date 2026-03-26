@@ -1,9 +1,15 @@
 import mongoose from "mongoose";
 
-export async function connectDb(uri) {
-  let uri=await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-  if (!uri) throw new Error("Missing MONGODB_URI");
-  mongoose.set("strictQuery", true);
-  await mongoose.connect(uri);
-}
+export async function connectDb() {
+  const uri = process.env.MONGO_URI;  // get URI from env
+  if (!uri) throw new Error("Missing MONGO_URI environment variable");
 
+  try {
+    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.set("strictQuery", true);
+    console.log("MongoDB connected successfully");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+  }
+}
