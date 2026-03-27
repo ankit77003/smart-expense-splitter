@@ -1,103 +1,98 @@
 # Smart Expense Splitter
 
-Full-stack app to **split group expenses** and produce a **minimal set of settlement transactions**.
+A full-stack web application to manage and split group expenses efficiently, minimizing the number of transactions required for settlement.
 
-## Tech
+## Live Demo
 
-- **Frontend**: React (Vite), minimal UI
-- **Backend**: Node.js + Express
-- **Database**: MongoDB (Mongoose)
-- **Auth**: JWT (Bearer token)
+🌐 Frontend: https://smart-expense-splitter-pi.vercel.app
+⚙️ Backend API: https://smart-expense-splitter-1-2qpp.onrender.com
+
+
+## Tech Stack
+
+- Frontend: React (Vite)
+- Backend: Node.js, Express.js
+- Database: MongoDB (Mongoose)
+- Authentication: JWT (Bearer Token)
+
 
 ## Features
 
-- **Authentication**: register/login, JWT stored in browser `localStorage`
-- **Groups**: create groups, add members (by email)
-- **Expenses**: add expenses with payer + participants (equal split; backend also supports custom shares)
-- **Balances**: computes each member’s net amount
-- **Debt optimization**: reduces to a minimal number of transactions
-- **Final settlement**: “A pays B ₹500” style output
+- 🔐 User authentication (Register/Login with JWT)
+- 👥 Create groups and manage members
+- 💸 Add expenses with equal/custom splits
+- 📊 Real-time balance calculation
+- ⚡ Optimized debt settlement (minimum transactions)
+- 📦 RESTful API architecture
 
-## The optimization algorithm (core DSA)
+## The optimization algorithm (Core Algorithm)
 
-The backend converts all expenses into a **net balance per user** and then “nets” them out.
+This project uses a greedy algorithm to minimize the number of transactions.
 
-### Step 1: Convert expenses to net balances
+### Step 1: Convert Expenses → Net Balances
 
-For each expense of amount \(A\):
-
-- Payer gets **credited** by \(+A\)
-- Each participant gets **debited** by \(-share\)
+- Payer gets +amount
+- Participants get -share
 
 After processing all expenses:
 
-- **net \(> 0\)** → user should **receive**
-- **net \(< 0\)** → user should **pay**
-
-This transformation removes all the small per-expense edges and turns the problem into a flow-netting problem.
+- Positive → should receive
+- Negative → should pay
 
 ### Step 2: Greedy matching (min transactions)
 
-We build:
+- Separate into creditors and debtors
+- Match largest debtor with largest creditor
+- Transfer minimum amount
+- Repeat until settled
 
-- **creditors**: users with net \(> 0\)
-- **debtors**: users with net \(< 0\) (store as positive “amount to pay”)
-
-Then we repeatedly match the **largest debtor** with the **largest creditor**:
-
-1. pay = min(debtor.amount, creditor.amount)
-2. record a transfer: debtor → creditor for `pay`
-3. reduce both amounts; whichever hits zero is removed
-
-This greedy approach produces **at most \(N-1\)** transfers and is the standard optimal way to **minimize the number of transactions** once you’re working with net balances (every transfer eliminates at least one non-zero balance).
-
-Implementation lives in:
-
-- `backend/src/services/settlementService.js` (`computeNetByUser`, `optimizeSettlement`)
+Ensures at most (N - 1) transactions
 
 ## API (high level)
 
-Base URL: `http://localhost:5000/api`
+Base URL: `https://smart-expense-splitter-1-2qpp.onrender.com/api`
 
-- `POST /auth/register`
-- `POST /auth/login`
-- `GET /groups` (auth)
-- `POST /groups` (auth)
-- `GET /groups/:groupId` (auth)
-- `POST /groups/:groupId/members` (auth)
-- `GET /groups/:groupId/expenses` (auth)
-- `POST /groups/:groupId/expenses` (auth)
-- `GET /groups/:groupId/settlement` (auth) → optimized transfers + balances
+METHOD   ENDPOINTS
+- POST	/auth/register
+- POST	/auth/login
+- GET	/groups
+- POST	/groups
+- GET	/groups/:groupId
+- POST	/groups/:groupId/members
+- GET	/groups/:groupId/expenses
+- POST	/groups/:groupId/expenses
+- GET	/groups/:groupId/settlement
+
+##Screenshots
+- Login page
+  <img width="815" height="469" alt="Screenshot 2026-03-27 at 5 27 54 PM" src="https://github.com/user-attachments/assets/ce3d22df-e8b8-4dd6-a46a-f99cabfec98a" />
+ 
+- Dashboard
+  <img width="1256" height="511" alt="Screenshot 2026-03-27 at 5 28 58 PM" src="https://github.com/user-attachments/assets/1bf731d8-a96f-4448-a2bf-10e7e791b926" />
+
+- Group view
+  <img width="1279" height="680" alt="Screenshot 2026-03-27 at 5 29 25 PM" src="https://github.com/user-attachments/assets/aa8c23b6-f070-44b8-ad4b-33bd98b3a759" />
+
+- Settlement result
+  <img width="1002" height="210" alt="Screenshot 2026-03-27 at 5 29 47 PM" src="https://github.com/user-attachments/assets/2addc146-ee36-41c0-be36-4a19c8669b1d" />
+
 
 ## Run locally
 
-### 1) Start MongoDB
+### 1) Backend
 
-Use your local install or Docker. Example DB name in `.env.example` is `smart-expense-splitter`.
-
-### 2) Backend
-
-From `SmartExpenseSplitter/backend`:
-
-```bash
+cd backend
 npm install
 cp .env.example .env
 npm run dev
-```
 
-Backend runs on `http://localhost:5000`.
+### 2) Frontend
 
-### 3) Frontend
-
-From `SmartExpenseSplitter/frontend`:
-
-```bash
+cd frontend
 npm install
 cp .env.example .env
 npm run dev
-```
 
-Frontend runs on `http://localhost:5173`.
 
 ## Notes / assumptions
 
