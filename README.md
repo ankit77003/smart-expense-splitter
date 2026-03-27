@@ -23,7 +23,7 @@ Designed and deployed as a production-ready application with separate frontend a
 
 > Note: Backend may take a few seconds to wake up (hosted on free tier).
 
-```md```
+
 ## Tech Stack
 
 - Frontend: React (Vite)
