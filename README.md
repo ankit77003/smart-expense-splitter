@@ -7,6 +7,7 @@
 A full-stack web application to manage and split group expenses efficiently, minimizing the number of transactions required for settlement.
 
 Built to demonstrate full-stack development, REST API design, and algorithmic optimization using greedy techniques.
+Designed and deployed as a production-ready application with separate frontend and backend services.
 
 ## 🎯 Why This Project?
 
@@ -22,7 +23,7 @@ Built to demonstrate full-stack development, REST API design, and algorithmic op
 
 > Note: Backend may take a few seconds to wake up (hosted on free tier).
 
-
+```md```
 ## Tech Stack
 
 - Frontend: React (Vite)
@@ -82,18 +83,18 @@ Base URL: `https://smart-expense-splitter-1-2qpp.onrender.com/api`
 
 ## Screenshots
 
-###Login page
+### Login page
   
   <img width="815" height="469" alt="Screenshot 2026-03-27 at 5 27 54 PM" src="https://github.com/user-attachments/assets/ce3d22df-e8b8-4dd6-a46a-f99cabfec98a" />
  
-###Dashboard
+### Dashboard
   <img width="1256" height="511" alt="Screenshot 2026-03-27 at 5 28 58 PM" src="https://github.com/user-attachments/assets/1bf731d8-a96f-4448-a2bf-10e7e791b926" />
 
-###Group view
+### Group view
   
   <img width="1279" height="680" alt="Screenshot 2026-03-27 at 5 29 25 PM" src="https://github.com/user-attachments/assets/aa8c23b6-f070-44b8-ad4b-33bd98b3a759" />
 
-###Settlement result
+### Settlement result
   
   <img width="1002" height="210" alt="Screenshot 2026-03-27 at 5 29 47 PM" src="https://github.com/user-attachments/assets/2addc146-ee36-41c0-be36-4a19c8669b1d" />
 
@@ -102,7 +103,7 @@ Base URL: `https://smart-expense-splitter-1-2qpp.onrender.com/api`
 
 ### Backend
 
-```bash
+```bash```
 cd backend
 npm install
 cp .env.example .env
