@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import path from "path";
-import { fileURLToPath } from "url";
 
 import { authRouter } from "./routes/auth.routes.js";
 import { groupRouter } from "./routes/group.routes.js";
@@ -11,10 +9,6 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 export function createApp() {
   const app = express();
-
-  // ✅ Fix for __dirname in ES modules
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
 
   // ✅ CORS setup
   const rawOrigins = (process.env.CORS_ORIGIN || "").trim();
@@ -40,20 +34,14 @@ export function createApp() {
   // ✅ Health check
   app.get("/health", (_req, res) => res.json({ ok: true }));
 
-  // ✅ API routes
+  // ✅ API routes ONLY
   app.use("/api/auth", authRouter);
   app.use("/api/groups", groupRouter);
   app.use("/api/groups", expenseRouter);
 
-  // ✅ Serve frontend (IMPORTANT)
-  app.use(express.static(path.join(__dirname, "../dist")));
+  // ❌ NO frontend serving here
 
-  // ✅ Catch-all route for React (FIXES REFRESH ISSUE)
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../dist/index.html"));
-  });
-
-  // ✅ Error handler (keep last)
+  // ✅ Error handler (must be last)
   app.use(errorHandler);
 
   return app;
